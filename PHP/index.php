@@ -2,23 +2,32 @@
 require_once('../lib/database.php');
 require_once('../lib/filesystem.php');
 $db_ins = new DB();
-$file_ins = new File();
+$dbfile = new DBfile();
+$localfile = new Localfile();
 ?>
 
 <!DOCTYPE HTML>
-<html lang="ko">
+<html>
 
 <head>
-    <title>KWJ_WEB first</title>
+    <title>KWJ_WEB Index</title>
     <meta charset="UTF-8">
 </head>
 
 <body>
-    <h1>WEB Test Header1</h1>
+    <h1>KWJ Class List</h1>
     <?php
     $list = $db_ins->getClassList();
-    $file_ins->dirCreate($list);
+    $dbfile->checkClassDir($list);
+    $localfile->checkSubList_Recur();
     ?>
+    <ul>
+        <?php
+        for ($i = 0; $i < count($list); $i++) {
+            echo '<li><a href="' . $dbfile->get_bPath() . $list[$i] . '">' . $list[$i] . '</a></li>';
+        }
+        ?>
+    </ul>
 </body>
 
 </html> 
