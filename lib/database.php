@@ -17,6 +17,31 @@ class DB
         );
     }
 
+    function getCWDInfo($case = 2)
+    {
+        if (!isset($_GET['page'])) {
+            return "KWJ Class List";
+        } else {
+            $id = $_GET['page'];
+            $parent_id = substr($id, 0, 4);
+            $id = substr($id, 4, 2);
+            settype($id, 'integer');
+            settype($parent_id, 'integer');
+            $sql = "SELECT * FROM local_page WHERE
+             parent_id={$parent_id} AND page_id={$id}";
+            $result = mysqli_query($this->conn, $sql);
+            $row = mysqli_fetch_array($result);
+            switch ($case) {
+                case 0:
+                    return $id;
+                case 1:
+                    return $row['path'];
+                case 2:
+                    return substr($row['path'], 8);
+            }
+        }
+    }
+
     function getClassList()
     {
         if (isset($_GET['page'])) return;
@@ -58,46 +83,65 @@ class DB
         }
     }
 
+    function getSubList($bPath = null)
+    {
+        if (!isset($_GET['page'])) {
+            $bPath = '../Data/';
+        } else {
+            $id = $_GET['page'];
+            $parent_id = substr($id, 0, 4);
+            $id = substr($id, 4, 2);
+            settype($parent_id, 'integer');
+            settype($id, 'integer');
+            $bPath = $this->getPPath($parent_id, $id) . '/';
+        }
+
+        $subList = array_diff(scandir($bPath), array('.', '..'));
+        array_multisort($subList);
+        return $subList;
+    }
+
     // $list = File -> getSubList
     function checkPageList($subList, $bPath = null)
     {
         if (!isset($bPath)) $bPath = "../Data/";
+        $id = 0;
         $parent_id = 0;
         if (isset($_GET['page'])) {
             $id = $_GET['page'];
-            $parent_id = substr($id, 2);
-            $id = substr($id, 0, 2);
-            settype($id, 'integer');
+            $parent_id = substr($id, 0, 4);
+            $id = substr($id, 4, 2);
             settype($parent_id, 'integer');
+            settype($id, 'integer');
             $bPath = $this->getPPath($parent_id, $id) . '/';
         }
 
-        $sql = "SELECT * FROM local_page WHERE parent_id={$parent_id}";
+        $sql = "SELECT * FROM local_page WHERE parent_id={$id}";
         $result = mysqli_query($this->conn, $sql);
 
         for ($i = 0; $i < count($subList); $i++) {
             $row = null;
             $fPath = $bPath . $subList[$i];
             $child_cnt = count(scandir($fPath)) - 2;
-            $cid = $i + 1;
+            $nid = $i + 1;
             if (!($row = mysqli_fetch_array($result))) {
-                $this->mkPList($parent_id, $cid, $fPath, $child_cnt);
+                $this->mkPList($id, $nid, $fPath, $child_cnt);
                 continue;
             };
 
-            $id = $row['page_id'];
-            settype($id, 'integer');
+            $cid = $row['page_id'];
+            settype($cid, 'integer');
             $cnt = $row['children_cnt'];
             settype($cnt, 'integer');
-            $res = ($id != $cid) || ($row['path'] != $fPath) || ($cnt != $child_cnt);
+            $res = ($cid != $nid) || ($row['path'] != $fPath) || ($cnt != $child_cnt);
             if ($res) {
-                $this->chPList($parent_id, $id, $cid, $fPath, $child_cnt);
+                $this->chPList($id, $cid, $nid, $fPath, $child_cnt);
             }
         }
         while ($row = mysqli_fetch_array($result)) {
-            $id = $row['page_id'];
-            settype($id, 'integer');
-            $this->rmPList($parent_id, $id);
+            $cid = $row['page_id'];
+            settype($cid, 'integer');
+            $this->rmPList($id, $cid);
         }
     }
 

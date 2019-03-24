@@ -43,6 +43,7 @@ class File
     }
 
     // class_index ==> index distribution //
+    // Not good at this Time..TT
     function checkSubList_Recur()
     {
         $subList = scandir($this->bPath);
@@ -61,14 +62,6 @@ class File
             }
             $this->checkSubList_Recur($this->bPath . $subList[$i] . '/');
         }
-    }
-
-    function getSubList($bPath = null)
-    {
-        if (!isset($bPath)) $bPath = $this->bPath;
-        $subList = array_diff(scandir($bPath), array('.', '..'));
-        array_multisort($subList);
-        return $subList;
     }
 }
 ?>
