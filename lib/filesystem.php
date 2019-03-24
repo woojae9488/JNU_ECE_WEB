@@ -1,7 +1,7 @@
 <html>
 
 <?php
-class DBfile
+class File
 {
     private $bPath;
 
@@ -17,6 +17,7 @@ class DBfile
 
     function checkClassDir($checkList)
     {
+        if (isset($_GET['page'])) return;
         for ($i = 0; $i < count($checkList); $i++) {
             $fPath = $this->bPath . $checkList[$i];
             if (!file_exists($fPath)) {
@@ -40,17 +41,8 @@ class DBfile
             $this->checkSubDir($bPath, $subList);
         }
     }
-}
 
-class Localfile
-{
-    public $bPath;
-
-    function __construct($bPath = '../Data/')
-    {
-        $this->bPath = $bPath;
-    }
-
+    // class_index ==> index distribution //
     function checkSubList_Recur()
     {
         $subList = scandir($this->bPath);
@@ -71,9 +63,11 @@ class Localfile
         }
     }
 
-    function getSubList()
+    function getSubList($bPath = null)
     {
-        $subList = array_diff(scandir($this->bPath), array('.', '..'));
+        if (!isset($bPath)) $bPath = $this->bPath;
+        $subList = array_diff(scandir($bPath), array('.', '..'));
+        array_multisort($subList);
         return $subList;
     }
 }
