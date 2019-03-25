@@ -17,7 +17,8 @@ class DB
         );
     }
 
-    function getCWDInfo($case = 2)
+    // DB -> getCWDInfoToParam으로 대체 완료
+    function getCWDInfo($case = 3)
     {
         if (!isset($_GET['page'])) {
             return "KWJ Class List";
@@ -35,10 +36,36 @@ class DB
                 case 0:
                     return $id;
                 case 1:
-                    return $row['path'];
+                    return $parent_id;
                 case 2:
+                    return $row['path'] . '/';
+                case 3:
                     return substr($row['path'], 8);
             }
+        }
+    }
+
+    function getCWDInfoToParam(&$_pid, &$_id, &$_path, &$_name)
+    {
+        if (!isset($_GET['page'])) {
+            $_pid = 0;
+            $_id = 0;
+            $_path = './';
+            $_name = 'KWJ Class List';
+            return false;
+        } else {
+            $_id = $_GET['page'];
+            $_pid = substr($_id, 0, 4);
+            $_id = substr($_id, 4, 2);
+            settype($_id, 'integer');
+            settype($_pid, 'integer');
+            $sql = "SELECT * FROM local_page WHERE
+             parent_id={$_pid} AND page_id={$_id}";
+            $result = mysqli_query($this->conn, $sql);
+            $row = mysqli_fetch_array($result);
+            $_path = $row['path'] . '/';
+            $_name = substr($row['path'], 8);
+            return true;
         }
     }
 
@@ -114,6 +141,7 @@ class DB
             settype($parent_id, 'integer');
             settype($id, 'integer');
             $bPath = $this->getPPath($parent_id, $id) . '/';
+            $id = $parent_id * 100 + $id;
         }
 
         $sql = "SELECT * FROM local_page WHERE parent_id={$id}";
@@ -122,7 +150,10 @@ class DB
         for ($i = 0; $i < count($subList); $i++) {
             $row = null;
             $fPath = $bPath . $subList[$i];
-            $child_cnt = count(scandir($fPath)) - 2;
+            $child_cnt = 0;
+            if (is_dir($fPath)) {
+                $child_cnt = count(scandir($fPath)) - 2;
+            }
             $nid = $i + 1;
             if (!($row = mysqli_fetch_array($result))) {
                 $this->mkPList($id, $nid, $fPath, $child_cnt);
