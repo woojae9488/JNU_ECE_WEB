@@ -207,7 +207,7 @@ class DB
         }
     }
 
-    private function getPPath($pid, $id)
+    function getPPath($pid, $id)
     {
         $sql = "SELECT path FROM local_page WHERE 
          parent_id={$pid} AND page_id={$id}";

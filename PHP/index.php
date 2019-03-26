@@ -28,17 +28,32 @@ $db_ins->getCWDInfoToParam($cwdPid, $cwdId, $cwdPath, $cwdName);
 </head>
 
 <body>
-    <h1>CRUD 파일 올리기 부분 수정</h1>
-    <h1>파일일 경우 링크 따로 걸어주기</h1>
+    <h1>CRUD 파일 지우기 추가</h1>
+    <h1>파일 있는 폴더는 테이블 형식으로 보이기</h1>
+    <h1>프로세스 다운로드 다시 보기</h1>
     <h2><?= $cwdName ?></h2>
     <ul>
         <?php
         echo '<li><a href="index.php">Home</a></li>';
         for ($i = 0; $i < count($subList); $i++) {
-            $id = sprintf('%04d%02d', $cwdId, $i + 1);
-            echo '<li><a href="index.php?page=' . $id . '">' . $subList[$i] . '</a></li>';
-        }
-        ?>
+            if ($cwdPid > 0) {
+                $id = $cwdPid * 100 + $cwdId;
+                ?>
+        <li><?= $subList[$i] ?>
+            <form action="process_download.php" method="post">
+                <input type="hidden" name="page" value="<?= $id ?>">
+                <input type="hidden" name="file" value="<?= ($i + 1) ?>">
+                <input type="submit" value="Download">
+            </form>
+        </li>
+        <?php
+
+    } else {
+        $id = sprintf('%04d%02d', $cwdId, $i + 1);
+        echo '<li><a href="index.php?page=' . $id . '">' . $subList[$i] . '</a></li>';
+    }
+}
+?>
     </ul>
     <?php
     if ($cwdPid > 0) {
