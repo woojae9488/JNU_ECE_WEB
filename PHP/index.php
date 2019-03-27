@@ -28,9 +28,9 @@ $db_ins->getCWDInfoToParam($cwdPid, $cwdId, $cwdPath, $cwdName);
 </head>
 
 <body>
-    <h1>CRUD 파일 지우기 추가</h1>
     <h1>파일 있는 폴더는 테이블 형식으로 보이기</h1>
-    <h1>프로세스 다운로드 다시 보기</h1>
+    <h1>CRUD 파일 업데이트 추가(이름 같을 때)</h1>
+    <h1>delete시 confirm 함수 구현</h1>
     <h2><?= $cwdName ?></h2>
     <ul>
         <?php
@@ -44,6 +44,11 @@ $db_ins->getCWDInfoToParam($cwdPid, $cwdId, $cwdPath, $cwdName);
                 <input type="hidden" name="page" value="<?= $id ?>">
                 <input type="hidden" name="file" value="<?= ($i + 1) ?>">
                 <input type="submit" value="Download">
+            </form>
+            <form action="process_delete.php" method="post">
+                <input type="hidden" name="page" value="<?= $id ?>">
+                <input type="hidden" name="file" value="<?= ($i + 1) ?>">
+                <input type="submit" value="Delete" onclick="">
             </form>
         </li>
         <?php

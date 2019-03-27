@@ -6,7 +6,7 @@ $db_ins = new DB();
 $pid = $_POST['page'];
 $id = $_POST['file'];
 $path = $db_ins->getPPath($pid, $id);
-$name = end(explode('/', $path));
+$name = end(explode('/', $path)); //something is wlong...
 $filesize = filesize($path);
 
 if (file_exists($path)) {
