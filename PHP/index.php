@@ -1,7 +1,6 @@
-<?php
+﻿<?php
 require_once('../lib/database.php');
 require_once('../lib/filesystem.php');
-// require_once('../lib/crub.php');
 $db_ins = new DB();
 $file_ins = new File();
 
@@ -28,47 +27,79 @@ $db_ins->getCWDInfoToParam($cwdPid, $cwdId, $cwdPath, $cwdName);
 </head>
 
 <body>
-    <h1>파일 있는 폴더는 테이블 형식으로 보이기</h1>
-    <h1>CRUD 파일 업데이트 추가(이름 같을 때)</h1>
-    <h1>delete시 confirm 함수 구현</h1>
-    <h1>git에서 data파일 제외하고 올리기</h1>
+    <!--<h1>폴더 추가 삭제 수정 가능하게</h1>-->
+    <!--<h1>폴더 추가시 하위 폴더 상태(파일과 비슷하게 생각)</h1>-->
+    <!--<h1>file 관련 기본 함수들 확인</h1>-->
     <h2><?= $cwdName ?></h2>
-    <ul>
-        <?php
-        echo '<li><a href="index.php">Home</a></li>';
-        for ($i = 0; $i < count($subList); $i++) {
-            if ($cwdPid > 0) {
-                $id = $cwdPid * 100 + $cwdId;
-                ?>
-        <li><?= $subList[$i] ?>
-            <form action="process_download.php" method="post">
-                <input type="hidden" name="page" value="<?= $id ?>">
-                <input type="hidden" name="file" value="<?= ($i + 1) ?>">
-                <input type="submit" value="Download">
-            </form>
-            <form action="process_delete.php" method="post">
-                <input type="hidden" name="page" value="<?= $id ?>">
-                <input type="hidden" name="file" value="<?= ($i + 1) ?>">
-                <input type="submit" value="Delete" onclick="">
-            </form>
-        </li>
-        <?php
 
-    } else {
-        $id = sprintf('%04d%02d', $cwdId, $i + 1);
-        echo '<li><a href="index.php?page=' . $id . '">' . $subList[$i] . '</a></li>';
-    }
-}
-?>
-    </ul>
     <?php
     if ($cwdPid > 0) {
         ?>
+    <p><a href="index.php">Home</a></p>
+    <table border="1">
+        <thead>
+            <td>File Name</td>
+            <td>Download</td>
+            <td>Delete</td>
+        </thead>
+        <tbody>
+            <?php
+            for ($i = 0; $i < count($subList); $i++) {
+                $id = $cwdPid * 100 + $cwdId;
+                ?>
+            <tr>
+                <td><?= $subList[$i] ?></td>
+                <td>
+                    <form action="process_download.php" method="post">
+                        <input type="hidden" name="page" value="<?= $id ?>">
+                        <input type="hidden" name="file" value="<?= ($i + 1) ?>">
+                        <input type="submit" value="Download">
+                    </form>
+                </td>
+                <td>
+                    <form action="process_file_delete.php" method="post" onsubmit="if(!confirm('sure?'))return false;">
+                        <input type="hidden" name="page" value="<?= $id ?>">
+                        <input type="hidden" name="file" value="<?= ($i + 1) ?>">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            <?php 
+        } ?>
+        </tbody>
+    </table>
     <form action="process_upload.php?page=<?= $_GET['page'] ?>" method="post" enctype="multipart/form-data">
         <p>Select File to Upload :</p>
         <input type="hidden" name="page" value="<?= $_GET['page'] ?>">
         <input type="file" name="upfile" id="upfile">
         <input type="submit" value="Upload file">
+        <?php 
+    } else { ?>
+        <ul>
+            <?php
+            echo '<li><a href="index.php">Home</a></li>';
+            for ($i = 0; $i < count($subList); $i++) {
+                $id = sprintf('%04d%02d', $cwdId, $i + 1);
+                echo '<li><a href="index.php?page=' . $id . '">' . $subList[$i] . '</a></li>';
+            }
+            ?>
+        </ul>
+        <table>
+            <td>
+                <form action="dir_create.php" method="post">
+                    <input type="hidden" name="pid" value="<?= $cwdPid ?>">
+                    <input type="hidden" name="id" value="<?= $cwdPid ?>">
+                    <input type="submit" value="Create">
+                </form>
+            </td>
+            <td>
+                <form action="dir_change.php" method="post">
+                    <input type="hidden" name="pid" value="<?= $cwdPid ?>">
+                    <input type="hidden" name="id" value="<?= $cwdPid ?>">
+                    <input type="submit" value="Update or Delete">
+                </form>
+            </td>
+        </table>
         <?php 
     } ?>
 </body>
