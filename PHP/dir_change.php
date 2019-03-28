@@ -4,10 +4,6 @@ require_once('../lib/filesystem.php');
 $db_ins = new DB();
 $file_ins = new File();
 
-$list = $db_ins->getClassList();
-$file_ins->checkClassDir($list);
-
-$db_ins->checkBasicPath();
 $subList = $db_ins->getSubList();
 $db_ins->checkPageList($subList);
 
@@ -27,7 +23,7 @@ $db_ins->getCWDInfoToParam($cwdPid, $cwdId, $cwdPath, $cwdName);
 </head>
 
 <body>
-    <h2><?= $cwdName ?></h2>
+    <h2><?= $cwdName ?>(Change)</h2>
     <ul>
         <?php
         echo '<li><a href="index.php">Home</a></li>';
@@ -37,22 +33,6 @@ $db_ins->getCWDInfoToParam($cwdPid, $cwdId, $cwdPath, $cwdName);
         }
         ?>
     </ul>
-    <table>
-        <td>
-            <form action="dir_create.php" method="post">
-                <input type="hidden" name="pid" value="<?= $cwdPid ?>">
-                <input type="hidden" name="id" value="<?= $cwdPid ?>">
-                <input type="submit" value="Create">
-            </form>
-        </td>
-        <td>
-            <form action="dir_change.php" method="post">
-                <input type="hidden" name="pid" value="<?= $cwdPid ?>">
-                <input type="hidden" name="id" value="<?= $cwdPid ?>">
-                <input type="submit" value="Update or Delete">
-            </form>
-        </td>
-    </table>
 </body>
 
 </html> 

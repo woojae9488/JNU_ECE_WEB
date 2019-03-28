@@ -209,6 +209,7 @@ class DB
 
     function getPPath($pid, $id)
     {
+        if ($id == 0) $pid = -1;
         $sql = "SELECT path FROM local_page WHERE 
          parent_id={$pid} AND page_id={$id}";
         $result = null;

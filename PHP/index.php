@@ -16,6 +16,11 @@ $cwdId = 0;
 $cwdPath = "";
 $cwdName = "";
 $db_ins->getCWDInfoToParam($cwdPid, $cwdId, $cwdPath, $cwdName);
+
+$page = "";
+if (isset($_GET['page'])) {
+    $page .= "?page={$_GET['page']}";
+}
 ?>
 
 <!DOCTYPE HTML>
@@ -68,7 +73,7 @@ $db_ins->getCWDInfoToParam($cwdPid, $cwdId, $cwdPath, $cwdName);
         } ?>
         </tbody>
     </table>
-    <form action="process_upload.php?page=<?= $_GET['page'] ?>" method="post" enctype="multipart/form-data">
+    <form action="process_upload.php<?= $page ?>" method="post" enctype="multipart/form-data">
         <p>Select File to Upload :</p>
         <input type="hidden" name="page" value="<?= $_GET['page'] ?>">
         <input type="file" name="upfile" id="upfile">
@@ -86,14 +91,14 @@ $db_ins->getCWDInfoToParam($cwdPid, $cwdId, $cwdPath, $cwdName);
         </ul>
         <table>
             <td>
-                <form action="dir_create.php" method="post">
+                <form action="dir_create.php<?= $page ?>" method="post">
                     <input type="hidden" name="pid" value="<?= $cwdPid ?>">
                     <input type="hidden" name="id" value="<?= $cwdPid ?>">
                     <input type="submit" value="Create">
                 </form>
             </td>
             <td>
-                <form action="dir_change.php" method="post">
+                <form action="dir_change.php<?= $page ?>" method="post">
                     <input type="hidden" name="pid" value="<?= $cwdPid ?>">
                     <input type="hidden" name="id" value="<?= $cwdPid ?>">
                     <input type="submit" value="Update or Delete">
