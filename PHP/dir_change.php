@@ -1,6 +1,7 @@
 <?php
 require_once('../lib/database.php');
 require_once('../lib/filesystem.php');
+require_once('../lib/crub.php');
 $db_ins = new DB();
 $file_ins = new File();
 
@@ -24,15 +25,19 @@ $db_ins->getCWDInfoToParam($cwdPid, $cwdId, $cwdPath, $cwdName);
 
 <body>
     <h2><?= $cwdName ?>(Change)</h2>
-    <ul>
-        <?php
-        echo '<li><a href="index.php">Home</a></li>';
-        for ($i = 0; $i < count($subList); $i++) {
-            $id = sprintf('%04d%02d', $cwdId, $i + 1);
-            echo '<li><a href="index.php?page=' . $id . '">' . $subList[$i] . '</a></li>';
-        }
-        ?>
-    </ul>
+    <!--<h1>테이블 형식으로 이름인풋, 업데이트, 델리트</h1>-->
+    <p><a href="index.php">Home</a></p>
+    <?php
+    echo "<table><tbody>";
+    for ($i = 0; $i < count($subList); $i++) {
+        $a; $b;
+        sep_ClsNProf($subList[$i],$a,$b);
+        exit;
+        $id = sprintf('%04d%02d', $cwdId, $i + 1);
+        echo '<li><a href="index.php?page=' . $id . '">' . $subList[$i] . '</a></li>';
+    }
+    echo "</tbody></table>";
+    ?>
 </body>
 
 </html> 

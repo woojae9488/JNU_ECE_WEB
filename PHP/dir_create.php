@@ -33,13 +33,29 @@ $db_ins->getCWDInfoToParam($cwdPid, $cwdId, $cwdPath, $cwdName);
         }
         ?>
     </ul>
+    <?php
+    if ($cwdId == 0) {
+        ?>
     <form action="process_create_dir.php" method="post">
-        Directory name : 
+        <p>Class name :
+            <input type="text" name="className" placeholder="Class"></p>
+        <p>Professor name :
+            <input type="text" name="profName" placeholder="Professor"></p>
+        <input type="hidden" name="pid" value=<?= $cwdPid ?>>
+        <input type="hidden" name="id" value=<?= $cwdId ?>>
+        <input type="submit" value="Create Directory">
+    </form>
+    <?php 
+} else { ?>
+    <form action="process_create_dir.php" method="post">
+        Directory name :
         <input type="text" name="dirName">
         <input type="hidden" name="pid" value=<?= $cwdPid ?>>
         <input type="hidden" name="id" value=<?= $cwdId ?>>
         <input type="submit" value="Create Directory">
     </form>
+    <?php 
+} ?>
 </body>
 
 </html> 

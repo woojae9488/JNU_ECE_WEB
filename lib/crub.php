@@ -13,6 +13,15 @@ function getPageId(&$_pid, &$_id)
     settype($_id, 'integer');
     return true;
 }
+
+function sep_ClsNProf($cName, &$class, &$prof)
+{
+    $cName = explode('(', $cName);
+    $class = $cName[0];
+    $prof = substr($cName[1], 0, -1);
+    var_dump($class);
+    var_dump($prof);
+}
 ?>
 
 </html> 

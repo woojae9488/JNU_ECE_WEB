@@ -220,6 +220,55 @@ class DB
         $row = mysqli_fetch_array($result);
         return $row['path'];
     }
+
+    function getProfessor($name, $major = "software")
+    {
+        $sql =
+            "SELECT * FROM professor WHERE name='{$name}' AND major='{$major}'";
+        $this->result = mysqli_query($this->conn, $sql);
+
+        $row = mysqli_fetch_array($this->result);
+        if (!$row) {
+            return $this->putProfessor($name, $major);
+        }
+        return $row['id'];
+    }
+
+    private function putProfessor($name, $major = "software")
+    {
+        $sql =
+            "INSERT INTO professor VALUES (null, '{$name}', '{$major}')";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "put error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+        }
+        return $this->getProfessor($name, $major);
+    }
+
+    function getClass($name, $prof_id, $code = null)
+    {
+        $sql =
+            "SELECT * FROM class WHERE name='{$name}' AND professor_id={$prof_id}";
+        $this->result = mysqli_query($this->conn, $sql);
+
+        $row = mysqli_fetch_array($this->result);
+        if (!$row) {
+            return $this->putClass($name, $prof_id, $code);
+        }
+        return $row['id'];
+    }
+
+    // $prof_id == DB->putProfessor()
+    private function putClass($name, $prof_id, $code = null)
+    {
+        $sql =
+            "INSERT INTO class VALUES (null, '{$name}', '{$code}',{$prof_id})";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "put error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+        }
+        return $this->getClass($name, $prof_id, $code);
+    }
 }
 ?>
 
