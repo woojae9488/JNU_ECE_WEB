@@ -89,22 +89,13 @@ if (isset($_GET['page'])) {
             }
             ?>
         </ul>
-        <table>
-            <td>
-                <form action="dir_create.php<?= $page ?>" method="post">
-                    <input type="hidden" name="pid" value="<?= $cwdPid ?>">
-                    <input type="hidden" name="id" value="<?= $cwdPid ?>">
-                    <input type="submit" value="Create">
-                </form>
-            </td>
-            <td>
-                <form action="dir_change.php<?= $page ?>" method="post">
-                    <input type="hidden" name="pid" value="<?= $cwdPid ?>">
-                    <input type="hidden" name="id" value="<?= $cwdPid ?>">
-                    <input type="submit" value="Update or Delete">
-                </form>
-            </td>
-        </table>
+        <td>
+            <form action="dir_create.php<?= $page ?>" method="post">
+                <input type="hidden" name="pid" value="<?= $cwdPid ?>">
+                <input type="hidden" name="id" value="<?= $cwdPid ?>">
+                <input type="submit" value="Create">
+            </form>
+        </td>
         <?php 
     } ?>
 </body>

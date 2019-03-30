@@ -4,6 +4,7 @@
 class File
 {
     private $bPath;
+    private $bList = ['Lecture Document', 'Homework', 'etc'];
 
     function __construct($bPath = '../Data/')
     {
@@ -13,6 +14,11 @@ class File
     function get_bPath()
     {
         return $this->bPath;
+    }
+
+    function get_bList()
+    {
+        return $this->bList;
     }
 
     function checkClassDir($checkList)
@@ -37,8 +43,7 @@ class File
                 }
             }
         } else {
-            $subList = ['Lecture Document', 'Homework', 'etc'];
-            $this->checkSubDir($bPath, $subList);
+            $this->checkSubDir($bPath, $this->bList);
         }
     }
 
