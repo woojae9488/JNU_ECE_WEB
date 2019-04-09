@@ -39,6 +39,7 @@ class mbtiQuestion
         if (!($result = mysqli_query($this->conn, $sql))) {
             echo "question read error 발생 log 파일 확인!<br>";
             error_log(mysqli_error($this->conn));
+            return null;
         }
         $row = mysqli_fetch_array($result);
 
@@ -63,6 +64,7 @@ class mbtiType
         if (!($result = mysqli_query($this->conn, $sql))) {
             echo "type read error 발생 log 파일 확인!<br>";
             error_log(mysqli_error($this->conn));
+            return null;
         }
         $row = mysqli_fetch_array($result);
 
@@ -77,6 +79,7 @@ class mbtiType
         if (!($result = mysqli_query($this->conn, $sql))) {
             echo "type read error 발생 log 파일 확인!<br>";
             error_log(mysqli_error($this->conn));
+            return null;
         }
         $row = mysqli_fetch_array($result);
 
@@ -95,7 +98,76 @@ class mbtiType
         if (!mysqli_query($this->conn, $sql)) {
             echo "tcount update error 발생 log 파일 확인!<br>";
             error_log(mysqli_error($this->conn));
+            return false;
         }
+        return true;
     }
 }
-?>
+
+class mbtiUser
+{
+    private $conn;
+
+    function __construct($conn)
+    {
+        $this->conn = $conn;
+    }
+
+    function enrollUser($id, $passwd)
+    {
+        $hashedPW = hash('sha256', $passwd);
+        $sql = "INSERT INTO mbti_user 
+                VALUES (${id}, '{$hashedPW}', NOW())";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "user enroll error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
+
+    function getUserInfo($id, $passwd)
+    {
+        $hashedPW = hash('sha256', $passwd);
+        $sql = "SELECT * FROM mbti_user
+                WHERE uid={$id}";
+        $result = null;
+        if (!($result = mysqli_query($this->conn, $sql))) {
+            echo "user read error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return null;
+        }
+        $row = mysqli_fetch_array($result);
+
+        if ($hashedPW != $row['upasswd']) return null;
+        else return $row['created'];
+    }
+
+    function changePasswd($id, $oldpw, $newpw)
+    {
+        if ($this->getUserInfo($id, $oldpw)) {
+            echo "기존 비밀번호 불일치!<br>";
+            return false;
+        }
+
+        $hashedNPW = hash('sha256', $newpw);
+        $sql = "UPDATE mbti_user SET upasswd='{$hashedNPW}'
+                WHERE uid={$id}";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "password change error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
+}
+
+class mbtiSelect
+{
+
+}
+
+class mbtiResult
+{
+    
+}
