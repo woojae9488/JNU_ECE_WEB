@@ -391,17 +391,57 @@ class mbtiResult
 
         $typeRow = $this->testType->getTypeInfoByName($tname);
         $tid = $typeRow['tid'];
+        settype($tid, 'integer');
 
         if ($changeFlag == false) {
-            $this->testType->increaseTypeCnt($tname);
             $this->pushResult($uid, $tid, $EISum, $SNSum, $TFSum, $JPSum);
         } else {
-            // tid 알아내서 decrease 후에 increase 하기
-            // increase는 공통이므로 밖으로 빼도 되겠다.
+            $oldTypeRow = $this->getTypeInfoByUid($uid);
+            $this->testType->decreaseTypeCnt($oldTypeRow['tname']);
             $this->changeResult($uid, $tid, $EISum, $SNSum, $TFSum, $JPSum);
         }
+        $this->testType->increaseTypeCnt($tname);
     }
-    // getResultInfo 함수 작성
-    // deleteResult 함수 작성
+
+    function getResultInfo($uid)
+    {
+        $sql = "SELECT * FROM mbti_res 
+        WHERE uid='{$uid}'";
+        $result = null;
+        if (!($result = mysqli_query($this->conn, $sql))) {
+            echo "result read error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return null;
+        }
+        $row = mysqli_fetch_array($result);
+
+        return $row;
+    }
+
+    function deleteResult($uid)
+    {
+        $sql = "DELETE FROM mbti_res WHERE uid='{$uid}'";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "result delete error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
+
+    function getTypeInfoByUid($uid)
+    {
+        $sql = "SELECT T.* FROM mbti_type AS T, mbti_res AS R
+                WHERE R.uid='{$uid}' AND R.tid=T.tid";
+        $result = null;
+        if (!($result = mysqli_query($this->conn, $sql))) {
+            echo "result read error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return null;
+        }
+        $row = mysqli_fetch_array($result);
+
+        return $row;
+    }
 }
 ?>
