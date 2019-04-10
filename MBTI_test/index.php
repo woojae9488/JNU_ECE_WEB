@@ -12,11 +12,12 @@ require_once('./lib/mbtiDB.php');
 
 <body>
     <?php
-    if (null) {
-        echo "null";
-    } else {
-        echo "not null";
+    $type = ['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P'];
+    $typeRes = "";
+    for ($i = 0; $i < count($type); $i++) {
+        $typeRes .= $type[$i];
     }
+    var_dump($typeRes);
     ?>
 </body>
 

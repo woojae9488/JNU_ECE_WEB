@@ -102,6 +102,23 @@ class mbtiType
         }
         return true;
     }
+
+    function decreaseTypeCnt($tname)
+    {
+        $row = $this->getTypeInfoByName($tname);
+        $typeCnt = $row['tcount'];
+        settype($typeCnt, 'integer');
+        $typeCnt--;
+
+        $sql = "UPDATE mbti_type SET tcount={$typeCnt} 
+                WHERE tname={$tname}";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "tcount update error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
 }
 
 class mbtiUser
@@ -222,6 +239,23 @@ class mbtiSelect
         return $choiceArr; // 정확히 배열순서로 들어가는지 확인 필요!
     }
 
+    function getSelectSum($uid, $qtype)
+    {
+        $sql = "SELECT SUM(choice) FROM mbti_sel
+                WHERE uid='{$uid}' AND qtype='{$qtype}'";
+        $result = null;
+        if (!($result = mysqli_query($this->conn, $sql))) {
+            echo "select read error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return null;
+        }
+        $row = mysqli_fetch($result);
+
+        $sum = $row['SUM(choice)'];
+        settype($sum, 'integer');
+        return $sum;
+    }
+
     function pushSelect($uid, $qtype, $qnum, $choice)
     {
         $boolValue = $choice ? 1 : 0;
@@ -281,7 +315,8 @@ class mbtiSelect
         return true;
     }
 
-    function deleteSelectAll($uid, $qtype){
+    function deleteSelectAll($uid, $qtype)
+    {
         $sql = "DELETE FROM mbti_sel WHERE uid='{$uid}'
                 AND qtype='{$qtype}'";
         if (!mysqli_query($this->conn, $sql)) {
@@ -296,9 +331,77 @@ class mbtiSelect
 class mbtiResult
 {
     private $conn;
+    private $testSel;
+    private $testType;
 
     function __construct($conn)
     {
         $this->conn = $conn;
+        $this->testSel = new mbtiSelect($conn);
+        $this->testType = new mbtiType($conn);
     }
+
+    private function pushResult($uid, $tid, $EISum, $SNSum, $TFSum, $JPSum)
+    {
+        $sql = "INSERT INTO mbti_res VALUES
+        ('{$uid}',{$tid},{$EISum},{$SNSum},{$TFSum},{$JPSum})";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "result input error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
+
+    private function changeResult($uid, $newtid, $EISum, $SNSum, $TFSum, $JPSum)
+    {
+        $sql = "UPDATE mbti_res SET tid={$newtid}, eisum={$EISum},
+                snsum={$SNSum}, tfsum={$TFSum}, jpsum={$JPSum}
+                WHERE uid='{$uid}'";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "result input error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
+
+    function calcAndPushResult($uid, $changeFlag = false)
+    {
+        $tArr = ['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P'];
+        $tRes = array();
+        for ($i = 0; $i < count($tArr); $i++) {
+            $tRes[$i] = $this->testSel->getSelectSum($uid, $tArr[$i]);
+        }
+
+        $EISum = $tRes[0] - $tRes[1];
+        $SNSum = $tRes[2] - $tRes[3];
+        $TFSum = $tRes[4] - $tRes[5];
+        $JPSum = $tRes[6] - $tRes[7];
+
+        $tname = "";
+        if ($EISum > 0) $tname .= "E";
+        else $tname .= "I";
+        if ($SNSum > 0) $tname .= "S";
+        else $tname .= "N";
+        if ($TFSum > 0) $tname .= "T";
+        else $tname .= "F";
+        if ($JPSum > 0) $tname .= "J";
+        else $tname .= "P";
+
+        $typeRow = $this->testType->getTypeInfoByName($tname);
+        $tid = $typeRow['tid'];
+
+        if ($changeFlag == false) {
+            $this->testType->increaseTypeCnt($tname);
+            $this->pushResult($uid, $tid, $EISum, $SNSum, $TFSum, $JPSum);
+        } else {
+            // tid 알아내서 decrease 후에 increase 하기
+            // increase는 공통이므로 밖으로 빼도 되겠다.
+            $this->changeResult($uid, $tid, $EISum, $SNSum, $TFSum, $JPSum);
+        }
+    }
+    // getResultInfo 함수 작성
+    // deleteResult 함수 작성
 }
+?>
