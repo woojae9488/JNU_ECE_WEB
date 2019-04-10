@@ -130,7 +130,7 @@ class mbtiUser
     {
         $hashedPW = hash('sha256', $passwd);
         $sql = "SELECT * FROM mbti_user
-                WHERE uid={$id}";
+                WHERE uid='{$id}'";
         $result = null;
         if (!($result = mysqli_query($this->conn, $sql))) {
             echo "user read error 발생 log 파일 확인!<br>";
@@ -152,9 +152,25 @@ class mbtiUser
 
         $hashedNPW = hash('sha256', $newpw);
         $sql = "UPDATE mbti_user SET upasswd='{$hashedNPW}'
-                WHERE uid={$id}";
+                WHERE uid='{$id}'";
         if (!mysqli_query($this->conn, $sql)) {
             echo "password change error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
+
+    function retireUser($id, $passwd)
+    {
+        if ($this->getUserInfo($id, $passwd)) {
+            echo "기존 비밀번호 불일치!<br>";
+            return false;
+        }
+
+        $sql = "DELETE FROM mbti_user WHERE uid='{$id}'";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "user retire error 발생 log 파일 확인!<br>";
             error_log(mysqli_error($this->conn));
             return false;
         }
@@ -164,10 +180,125 @@ class mbtiUser
 
 class mbtiSelect
 {
+    private $conn;
+    private $qcount;
 
+    function __construct($conn)
+    {
+        $this->conn = $conn;
+        $this->qcount = 9;
+    }
+
+    function getSelect($uid, $qtype, $qnum)
+    {
+        $sql = "SELECT * FROM mbti_sel WHERE uid='{$uid}'
+                AND qnum={$qnum} AND qtype='{$qtype}'";
+        $result = null;
+        if (!($result = mysqli_query($this->conn, $sql))) {
+            echo "select read error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return null;
+        }
+        $row = mysqli_fetch_array($result);
+
+        return $row['choice'];
+    }
+
+    function getSelectAll($uid, $qtype)
+    {
+        $sql = "SELECT * FROM mbti_sel 
+                WHERE uid='{$uid}' AND qtype='{$qtype}'
+                ORDER BY qnum";
+        $result = null;
+        if (!($result = mysqli_query($this->conn, $sql))) {
+            echo "select read error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return null;
+        }
+        $choiceArr = array();
+        while ($row = mysqli_fetch($result)) {
+            array_push($choiceArr, $row['choice']);
+        }
+        return $choiceArr; // 정확히 배열순서로 들어가는지 확인 필요!
+    }
+
+    function pushSelect($uid, $qtype, $qnum, $choice)
+    {
+        $boolValue = $choice ? 1 : 0;
+        $sql = "INSERT INTO mbti_sel 
+                VALUES('{$uid}', {$qnum}, '${qtype}', {$boolValue},)";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "select push error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
+
+    function pushSelectAll($uid, $qtype, $choiceArr)
+    {
+        if (count($choiceArr) != $this->qcount) return false;
+        for ($i = 0; $i < $this->qcount; $i++) {
+            if ($this->pushSelect($uid, $qtype, $i + 1, $choiceArr[$i]))
+                return false;
+        }
+        return true;
+    }
+
+    function changeSelect($uid, $qtype, $qnum, $choice)
+    {
+        $boolValue = $choice ? 1 : 0;
+        $sql = "UPDATE mbti_sel 
+                SET choice={$boolValue} WHERE uid='{$uid}' 
+                AND qnum={$qnum} AND qtype='{$qtype}'";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "select change error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
+
+    function changeSelectAll($uid, $qtype, $choiceArr)
+    {
+        if (count($choiceArr) != $this->qcount) return false;
+        for ($i = 0; $i < $this->qcount; $i++) {
+            if ($this->changeSelect($uid, $qtype, $i + 1, $choiceArr[$i]))
+                return false;
+        }
+        return true;
+    }
+
+    function deleteSelect($uid, $qtype, $qnum)
+    {
+        $sql = "DELETE FROM mbti_sel WHERE uid='{$uid}'
+                AND qnum={$qnum} AND qtype='{$qtype}'";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "select delete error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
+
+    function deleteSelectAll($uid, $qtype){
+        $sql = "DELETE FROM mbti_sel WHERE uid='{$uid}'
+                AND qtype='{$qtype}'";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "select delete error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
 }
 
 class mbtiResult
 {
-    
+    private $conn;
+
+    function __construct($conn)
+    {
+        $this->conn = $conn;
+    }
 }
