@@ -1,4 +1,5 @@
-<?php
+<? ?>
+<?php //
 require_once('./lib/mbtiDB.php');
 $mbti = new mbtiDB();
 $dbconn = $mbti->getMBTIDB();
@@ -10,9 +11,13 @@ $upw = $_POST['upasswd'];
 
 if ($wid == 1) {
     if ($dbuser->enrollUser($uid, $upw)) {
-        header("Location: testing.php");
+        setcookie('id', $uid);
+        header("Location: testing.php?level=0");
+    } else if ($dbuser->getUserInfo($uid, $upw)) {
+        setcookie('id', $uid);
+        header("Location: testing.php?level=0");
     } else {
-        $message = "이미 존재하는 ID거나 잘못된 로그인입니다.";
+        $message = "잘못된 로그인입니다.";
         echo "<script>\n";
         echo "alert('{$message}');\n";
         echo "location.href = 'login.php?wid={$wid}';\n";
@@ -21,6 +26,7 @@ if ($wid == 1) {
     }
 } else if ($wid == 2) {
     if ($dbuser->getUserInfo($uid, $upw)) {
+        setcookie('id', $uid);
         header("Location: record.php");
     } else {
         $message = "존재하는 ID가 없거나 잘못된 로그인입니다.";
@@ -31,3 +37,4 @@ if ($wid == 1) {
         //header("Location: login.php?wid={$wid}");
     }
 }
+?>

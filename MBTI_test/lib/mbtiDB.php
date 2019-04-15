@@ -1,3 +1,4 @@
+<? ?>
 <?php
 class mbtiDB
 {
@@ -134,13 +135,27 @@ class mbtiUser
     {
         $hashedPW = hash('sha256', $passwd);
         $sql = "INSERT INTO mbti_user 
-                VALUES (${id}, '{$hashedPW}', NOW())";
+                VALUES ('${id}', '{$hashedPW}', NOW())";
         if (!mysqli_query($this->conn, $sql)) {
             echo "user enroll error 발생 log 파일 확인!<br>";
             error_log(mysqli_error($this->conn));
             return false;
         }
         return true;
+    }
+
+    function checkUserExisted($id)
+    {
+        $sql = "SELECT * FROM mbti_user
+                WHERE uid='{$id}'";
+        $result = null;
+        if (!($result = mysqli_query($this->conn, $sql))) {
+            echo "user read error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        if (mysqli_fetch_array($result)) return false;
+        else return true;
     }
 
     function getUserInfo($id, $passwd)
@@ -199,11 +214,13 @@ class mbtiSelect
 {
     private $conn;
     private $qcount;
+    public $types;
 
     function __construct($conn)
     {
         $this->conn = $conn;
         $this->qcount = 9;
+        $this->type = ['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P'];
     }
 
     function getSelect($uid, $qtype, $qnum)
@@ -326,6 +343,44 @@ class mbtiSelect
         }
         return true;
     }
+
+    function checkSelectClear($uid)
+    {
+        $sql = "SELECT COUNT(*) AS cnt FROM mbti_sel 
+                WHERE uid='{$uid}'";
+        $result = null;
+        if (!($result = mysqli_query($this->conn, $sql))) {
+            echo "select read error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        $row = mysqli_fetch_array($result);
+        if (($this->qcount * 4) == $row['cnt']) return true;
+        else return false;
+    }
+
+    function checkSelectTypesEmpty($uid, $tArr)
+    {
+        $sql = "SELECT COUNT(*) AS cnt FROM mbti_sel 
+                WHERE uid='{$uid}' AND ";
+        $appendSql = "";
+        for ($i = 0; $i < count($tArr); $i++) {
+            $appendSql .= "qtype='{$tArr[$i]}'";
+            if ($i == count($tArr) - 1) break;
+            $appendSql .= " OR ";
+        }
+        $sql .= $appendSql;
+
+        $result = null;
+        if (!($result = mysqli_query($this->conn, $sql))) {
+            echo "select read error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        $row = mysqli_fetch_array($result);
+        if ($row['cnt'] == 0) return true;
+        else return false;
+    }
 }
 
 class mbtiResult
@@ -368,7 +423,7 @@ class mbtiResult
 
     function calcAndPushResult($uid, $changeFlag = false)
     {
-        $tArr = ['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P'];
+        $tArr = $this->testSel->types;
         $tRes = array();
         for ($i = 0; $i < count($tArr); $i++) {
             $tRes[$i] = $this->testSel->getSelectSum($uid, $tArr[$i]);
@@ -444,4 +499,5 @@ class mbtiResult
         return $row;
     }
 }
+// 필요한 트리거 제약 DB에 추가하기
 ?>
