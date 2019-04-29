@@ -35,7 +35,7 @@ class mbtiQuestion
     function getContent($qnum, $qtype)
     {
         $sql = "SELECT * FROM mbti_question 
-        WHERE qnum={$qnum} AND qtype='{$qtype}'";
+                WHERE qnum={$qnum} AND qtype='{$qtype}'";
         $result = null;
         if (!($result = mysqli_query($this->conn, $sql))) {
             echo "question read error 발생 log 파일 확인!<br>";
@@ -45,6 +45,23 @@ class mbtiQuestion
         $row = mysqli_fetch_array($result);
 
         return $row['qcontent'];
+    }
+
+    function getContentAll($qtype)
+    {
+        $sql = "SELECT * FROM mbti_question 
+                WHERE qtype='{$qtype}' ORDER BY qnum";
+        $result = null;
+        if (!($result = mysqli_query($this->conn, $sql))) {
+            echo "question read error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return null;
+        }
+        $contentArr = array();
+        while ($row = mysqli_fetch_array($result)) {
+            array_push($contentArr, $row['qcontent']);
+         }
+        return $contentArr;
     }
 }
 
@@ -220,7 +237,7 @@ class mbtiSelect
     {
         $this->conn = $conn;
         $this->qcount = 9;
-        $this->type = ['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P'];
+        $this->types = ['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P'];
     }
 
     function getSelect($uid, $qtype, $qnum)
@@ -250,7 +267,7 @@ class mbtiSelect
             return null;
         }
         $choiceArr = array();
-        while ($row = mysqli_fetch($result)) {
+        while ($row = mysqli_fetch_array($result)) {
             array_push($choiceArr, $row['choice']);
         }
         return $choiceArr; // 정확히 배열순서로 들어가는지 확인 필요!
@@ -266,7 +283,7 @@ class mbtiSelect
             error_log(mysqli_error($this->conn));
             return null;
         }
-        $row = mysqli_fetch($result);
+        $row = mysqli_fetch_array($result);
 
         $sum = $row['SUM(choice)'];
         settype($sum, 'integer');
