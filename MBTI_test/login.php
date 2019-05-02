@@ -1,7 +1,7 @@
 <?php
 require_once('./lib/cookie.php');
 if (checkLogin()) {
-    if ($_GET['wid'] == 1)  header("Location: testing.php?level=1");
+    if ($_GET['wid'] == 1)  header("Location: testing.php?level=0");
     else if ($_GET['wid'] == 2) header("Location: record.php");
 }
 ?>

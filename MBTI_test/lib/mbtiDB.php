@@ -60,7 +60,7 @@ class mbtiQuestion
         $contentArr = array();
         while ($row = mysqli_fetch_array($result)) {
             array_push($contentArr, $row['qcontent']);
-         }
+        }
         return $contentArr;
     }
 }
@@ -112,7 +112,7 @@ class mbtiType
         $typeCnt++;
 
         $sql = "UPDATE mbti_type SET tcount={$typeCnt} 
-                WHERE tname={$tname}";
+                WHERE tname='{$tname}'";
         if (!mysqli_query($this->conn, $sql)) {
             echo "tcount update error 발생 log 파일 확인!<br>";
             error_log(mysqli_error($this->conn));
@@ -129,7 +129,7 @@ class mbtiType
         $typeCnt--;
 
         $sql = "UPDATE mbti_type SET tcount={$typeCnt} 
-                WHERE tname={$tname}";
+                WHERE tname='{$tname}'";
         if (!mysqli_query($this->conn, $sql)) {
             echo "tcount update error 발생 log 파일 확인!<br>";
             error_log(mysqli_error($this->conn));
@@ -292,9 +292,8 @@ class mbtiSelect
 
     function pushSelect($uid, $qtype, $qnum, $choice)
     {
-        $boolValue = $choice ? 1 : 0;
         $sql = "INSERT INTO mbti_sel 
-                VALUES('{$uid}', {$qnum}, '${qtype}', {$boolValue},)";
+                VALUES('{$uid}', {$qnum}, '${qtype}', {$choice})";
         if (!mysqli_query($this->conn, $sql)) {
             echo "select push error 발생 log 파일 확인!<br>";
             error_log(mysqli_error($this->conn));
@@ -307,7 +306,7 @@ class mbtiSelect
     {
         if (count($choiceArr) != $this->qcount) return false;
         for ($i = 0; $i < $this->qcount; $i++) {
-            if ($this->pushSelect($uid, $qtype, $i + 1, $choiceArr[$i]))
+            if (!$this->pushSelect($uid, $qtype, $i + 1, $choiceArr[$i]))
                 return false;
         }
         return true;
@@ -372,7 +371,7 @@ class mbtiSelect
             return false;
         }
         $row = mysqli_fetch_array($result);
-        if (($this->qcount * 4) == $row['cnt']) return true;
+        if (($this->qcount * 8) == $row['cnt']) return true;
         else return false;
     }
 
@@ -443,7 +442,7 @@ class mbtiResult
         $tArr = $this->testSel->types;
         $tRes = array();
         for ($i = 0; $i < count($tArr); $i++) {
-            $tRes[$i] = $this->testSel->getSelectSum($uid, $tArr[$i]);
+            array_push($tRes, $this->testSel->getSelectSum($uid, $tArr[$i]));
         }
 
         $EISum = $tRes[0] - $tRes[1];
