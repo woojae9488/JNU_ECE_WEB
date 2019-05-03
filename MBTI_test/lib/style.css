@@ -1,0 +1,185 @@
+body{
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: #028197;
+}
+input[type="button"], input[type="submit"]{
+  border:0;
+  background: none;
+  text-align: center;
+  border: 2px solid #3498db;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 5px 5px;
+  width: 150px;
+  outline: none;
+  color: white;
+  border-radius: 20px;
+}
+input[type="button"]:hover, input[type="submit"]:hover{
+  border-color: #2ecc71;
+  background: #2ecc71;
+}
+.basicbox{
+  width: 300px;
+  padding: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #191919;
+  text-align: center;
+}
+.basicbox h1{
+  color: white;
+  font-weight: 500;
+}
+.basicbox input[type = "text"],.basicbox input[type = "password"]{
+  border:0;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid #3498db;
+  padding: 14px 10px;
+  width: 200px;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition: 0.25s;
+}
+.basicbox input[type = "text"]:focus,.basicbox input[type = "password"]:focus{
+  width: 280px;
+  border-color: #2ecc71;
+}
+.basicbox input[type = "submit"]{
+  border:0;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid #2ecc71;
+  padding: 14px 40px;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition: 0.25s;
+  cursor: pointer;
+}
+.basicbox input[type = "submit"]:hover{
+  background: #2ecc71;
+}
+.basicbox a{
+  border:0;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid #3498db;
+  padding: 14px 10px;
+  width: 200px;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition: 0.25s; 
+}
+.basicbox a:hover{
+  width: 280px;
+  border-color: #2ecc71;
+}
+.textbox{
+  width: 100%;
+  margin: 40px 0px;
+  padding: 20px 0px;
+  background: #191919;
+  text-align: center;
+}
+.textbox h1, .textbox h2, .textbox h3{
+  margin-top: 0;
+  color: white;
+  font-weight: 500;
+}
+.textbox p{
+  color: gray;
+}
+.testquestion{
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-gap: 10px 5px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  color:white;
+}
+.testquestion span{
+  margin-left: 70%;
+  text-align: center;
+  font-size: 1.5em;
+}
+.testquestion div[name="radiobox"]{
+  margin-right: 70%;
+}
+.typebox{
+  width: 100%;
+  margin: 40px 0px;
+  background: #191919;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 5fr;
+  grid-gap: 10px 5px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  justify-items: center;
+  align-items: center;
+  color: white;
+}
+.typebox h1{
+  grid-column: span 3;
+  margin-top: 0;
+}
+.typebox h2{
+  grid-row: span 2;
+  margin: 25px 0px;
+} 
+.typebox h4, .typebox p{
+  margin: 5px 0px;
+}
+.typebox input[type="button"]{
+  margin-top: 20px;
+  grid-column: span 3;
+}
+.statsbox{
+  width: 100%;
+  margin: 40px 0px;
+  background: #191919;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px 5px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  justify-items: center;
+  align-items: center;
+  color: white; 
+}
+.statsbox h1{
+  grid-column: span 2;
+  margin-top: 0; 
+}
+.statsbox h3{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 70%;
+  text-align: right;
+}
+.statsbox p{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 70%;
+  text-align: left;
+}
+.statsbox input[type="button"]{
+  margin-top: 20px;
+  grid-column: span 2;
+}

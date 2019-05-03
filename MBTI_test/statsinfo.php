@@ -12,17 +12,21 @@ $dbtype = new mbtiType($dbconn);
 <head>
     <meta charset="UTF-8">
     <title>MBTI TEST</title>
+    <link rel="stylesheet" href="./lib/style.css">
 </head>
 
 <body>
-    <h1>MBTI Type Stats</h1>
-    <?php
-    for ($i = 0; $i < $dbtype->getTypeCnt(); $i++) {
-        $typeInfo = $dbtype->getTypeInfoById($i + 1);
-        echo "<h3>{$typeInfo['tname']}</h3>\n";
-        echo "<p>해당 타입의 회원 수: {$typeInfo['tcount']}</p>\n";
-    }
-    ?>
+    <div class="statsbox">
+        <h1>MBTI Type Stats</h1>
+        <?php
+        for ($i = 0; $i < $dbtype->getTypeCnt(); $i++) {
+            $typeInfo = $dbtype->getTypeInfoById($i + 1);
+            echo "<h3>{$typeInfo['tname']} :</h3>\n";
+            echo "<p>{$typeInfo['tcount']}</p>\n";
+        }
+        ?>
+        <input type="button" value="홈으로 이동" onclick="location.href = 'index.php'">
+    </div>
 </body>
 
 </html>

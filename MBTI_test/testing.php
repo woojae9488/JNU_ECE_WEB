@@ -48,6 +48,7 @@ $tQuest2 = $dbquest->getContentAll($curTArr[1]);
 <head>
     <meta charset="UTF-8">
     <title>MBTI TEST</title>
+    <link rel="stylesheet" href="./lib/style.css">
     <script>
         function checkAllSelected() {
             var question1 = document.querySelectorAll('.qst1');
@@ -64,23 +65,31 @@ $tQuest2 = $dbquest->getContentAll($curTArr[1]);
 </head>
 
 <body>
-    <h1>MBTI_test</h1>
-    <form action="testing.php?level=<?= ($level + 1) ?>" method="POST">
-        <?php
-        for ($i = 0; $i < count($tQuest1); $i++) {
-            echo $tQuest1[$i] . "\n";
-            echo "<input type='radio' class='qst1' name='q{$i}' value='1'";
-            if ($records && $records[$i] == 1) echo " checked='checked'";
-            echo ">\n" . $tQuest2[$i] . "\n";
-            echo "<input type='radio' class='qst2' name='q{$i}' value='0'";
-            if ($records && $records[$i] == 0) echo " checked='checked'";
-            echo "><br>\n";
-        }
-        // 테이블 형식으로 변경 태그도 생각
-        ?>
-        <input type="button" value="이전" onclick="history.back()">
-        <input type="submit" value="다음" onclick="return checkAllSelected()">
-    </form>
+    <div class="textbox">
+        <h1>MBTI_test</h1>
+        <form action="testing.php?level=<?= ($level + 1) ?>" method="POST">
+            <div class="testquestion">
+                <?php
+                for ($i = 0; $i < count($tQuest1); $i++) {
+                    echo "<span>" . ($i + 1) . ".</span>\n";
+                    echo "<div>\n";
+                    echo $tQuest1[$i] . "<br>\n";
+                    echo $tQuest2[$i] . "\n</div>\n";
+                    echo "<div name='radiobox'>\n";
+                    echo "<input type='radio' class='qst1' name='q{$i}' value='1'";
+                    if ($records && $records[$i] == 1) echo " checked='checked'><br>\n";
+                    else echo "><br>\n";
+                    echo "<input type='radio' class='qst2' name='q{$i}' value='0'";
+                    if ($records && $records[$i] == 0) echo " checked='checked'>\n";
+                    else echo ">\n";
+                    echo "</div>\n";
+                }
+                ?>
+            </div>
+            <input type="button" value="이전" onclick="history.back()">
+            <input type="submit" value="다음" onclick="return checkAllSelected()">
+        </form>
+    </div>
 </body>
 
 </html>

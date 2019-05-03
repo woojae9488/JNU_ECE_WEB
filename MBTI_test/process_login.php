@@ -17,7 +17,7 @@ if ($wid == 1) {
         setcookie('id', $uid);
         header("Location: testing.php?level=0");
     } else {
-        $message = "잘못된 로그인입니다.";
+        $message = "ID가 이미 있거나 잘못된 로그인입니다.";
         echo "<script>\n";
         echo "alert('{$message}');\n";
         echo "location.href = 'login.php?wid={$wid}';\n";

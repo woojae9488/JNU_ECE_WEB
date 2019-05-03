@@ -461,7 +461,7 @@ class mbtiResult
 
     function calcAndPushResult($uid, $changeFlag = false)
     {
-        $tArr = $this->testSel->types;
+        $tArr = $this->testSel->getTypeArr();
         $tRes = array();
         for ($i = 0; $i < count($tArr); $i++) {
             array_push($tRes, $this->testSel->getSelectSum($uid, $tArr[$i]));
