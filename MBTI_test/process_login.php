@@ -1,5 +1,5 @@
 <? ?>
-<?php //
+<?php 
 require_once('./lib/mbtiDB.php');
 $mbti = new mbtiDB();
 $dbconn = $mbti->getMBTIDB();

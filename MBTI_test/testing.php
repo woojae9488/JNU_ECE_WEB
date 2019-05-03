@@ -7,7 +7,7 @@ $dbconn = $mbti->getMBTIDB();
 $dbquest = new mbtiQuestion($dbconn);
 $dbsel = new mbtiSelect($dbconn);
 
-$tArr = $dbsel->types;
+$tArr = $dbsel->getTypeArr();
 $level = $_GET['level'];
 $curTArr = array_slice($tArr, $level * 2, 2);
 $choices = array();
@@ -33,7 +33,7 @@ if ($_POST) {
 }
 
 if ($dbsel->checkSelectClear($idCookie)) {
-    header("Location: record.php?test=1");
+    header("Location: record.php?test=ok");
 } else if (!$dbsel->checkSelectTypesEmpty($idCookie, $curTArr)) {
     $records = $dbsel->getSelectAll($idCookie, $curTArr[0]);
 }

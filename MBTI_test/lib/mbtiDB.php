@@ -1,4 +1,3 @@
-<? ?>
 <?php
 class mbtiDB
 {
@@ -68,10 +67,17 @@ class mbtiQuestion
 class mbtiType
 {
     private $conn;
+    private $typeCnt;
 
     function __construct($conn)
     {
         $this->conn = $conn;
+        $this->typeCnt = 16;
+    }
+
+    function getTypeCnt()
+    {
+        return $this->typeCnt;
     }
 
     function getTypeInfoByName($tname)
@@ -92,7 +98,7 @@ class mbtiType
     function getTypeInfoById($tid)
     {
         $sql = "SELECT * FROM mbti_type 
-                WHERE tname='{$tid}'";
+                WHERE tid={$tid}";
         $result = null;
         if (!($result = mysqli_query($this->conn, $sql))) {
             echo "type read error 발생 log 파일 확인!<br>";
@@ -231,13 +237,18 @@ class mbtiSelect
 {
     private $conn;
     private $qcount;
-    public $types;
+    private $types;
 
     function __construct($conn)
     {
         $this->conn = $conn;
         $this->qcount = 9;
         $this->types = ['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P'];
+    }
+
+    function getTypeArr()
+    {
+        return $this->types;
     }
 
     function getSelect($uid, $qtype, $qnum)
@@ -352,6 +363,17 @@ class mbtiSelect
     {
         $sql = "DELETE FROM mbti_sel WHERE uid='{$uid}'
                 AND qtype='{$qtype}'";
+        if (!mysqli_query($this->conn, $sql)) {
+            echo "select delete error 발생 log 파일 확인!<br>";
+            error_log(mysqli_error($this->conn));
+            return false;
+        }
+        return true;
+    }
+
+    function deleteSelectTotal($uid)
+    {
+        $sql = "DELETE FROM mbti_sel WHERE uid='{$uid}'";
         if (!mysqli_query($this->conn, $sql)) {
             echo "select delete error 발생 log 파일 확인!<br>";
             error_log(mysqli_error($this->conn));
@@ -515,5 +537,4 @@ class mbtiResult
         return $row;
     }
 }
-// 필요한 트리거 제약 DB에 추가하기
 ?>
