@@ -51,23 +51,30 @@ $resTypeInfo = $dbtype->getTypeInfoById($result['tid']);
 <body>
     <div class="textbox">
         <h1><?= $idCookie ?>님의 MBTI 결과</h1>
-        <h2>MBTI 타입: <?= $resTypeInfo['tname'] ?></h2>
-        <h3>에너지 방향</h3>
-        <p>외향(E) <?= $result['eisum'] ?> 내향(I)</p>
-        <h3>인식 기능</h3>
-        <p>감각(S) <?= $result['snsum'] ?> 직관(N)</p>
-        <h3>판단 기능</h3>
-        <p>사고(T) <?= $result['tfsum'] ?> 감정(F)</p>
-        <h3>생활 양식</h3>
-        <p>판단(J) <?= $result['jpsum'] ?> 인식(P)</p>
-        <h2>유형에 따른 성격</h2>
-        <p><?= $resTypeInfo['comment'] ?></p>
-        <h2>유형에 관련된 직업</h2>
-        <p><?= $resTypeInfo['related_job'] ?></p>
+        <div class="resultbox">
+            <h2>MBTI 타입: <?= $resTypeInfo['tname'] ?></h2>
+            <h3>에너지 방향</h3>
+            <p>외향(E) <?= $result['eisum'] ?> 내향(I)</p>
+            <h3>인식 기능</h3>
+            <p>감각(S) <?= $result['snsum'] ?> 직관(N)</p>
+            <h3>판단 기능</h3>
+            <p>사고(T) <?= $result['tfsum'] ?> 감정(F)</p>
+            <h3>생활 양식</h3>
+            <p>판단(J) <?= $result['jpsum'] ?> 인식(P)</p>
+        </div>
+        <div class="resultbox">
+            <h2>유형에 따른 성격</h2>
+            <p><?= $resTypeInfo['comment'] ?></p>
+        </div>
+        <div class="resultbox">
+            <h2>유형에 관련된 직업</h2>
+            <p><?= $resTypeInfo['related_job'] ?></p>
+        </div>
 
         <input type="button" value="MBTI 재검사하기" onclick="return checkSurely()">
         <input type="button" value="홈으로 이동" onclick="location.href = 'index.php'">
     </div>
+    <a id="login" href="process_logout.php">Logout</a>
 </body>
 
 </html>

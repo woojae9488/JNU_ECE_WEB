@@ -1,7 +1,8 @@
 <?php
 require_once('./lib/cookie.php');
 if (checkLogin()) {
-    if ($_GET['wid'] == 1)  header("Location: testing.php?level=0");
+    if ($_GET['wid'] == 0) header("Location: index.php");
+    else if ($_GET['wid'] == 1)  header("Location: testing.php?level=0");
     else if ($_GET['wid'] == 2) header("Location: record.php");
 }
 ?>
@@ -16,7 +17,7 @@ if (checkLogin()) {
 </head>
 
 <body>
-    <form class="basicbox" action="process_login.php" method="POST">
+    <form class="centerbox" action="process_login.php" method="POST">
         <h1>MBTI_test Login</h1>
         <input type="hidden" name="wid" value="<?= $_GET['wid'] ?>">
         <input type="text" name="uid" placeholder="ID">

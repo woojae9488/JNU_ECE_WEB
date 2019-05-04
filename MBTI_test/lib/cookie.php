@@ -2,8 +2,7 @@
 function checkLogin()
 {
     if (!$_COOKIE) return false;
-    else if ($_COOKIE['id']) return true;
+    else if (array_key_exists('id', $_COOKIE)) return true;
     else return false;
 }
 ?>
-            

@@ -1,11 +1,10 @@
 body{
   margin: 0;
-  padding: 0;
+  padding: 50px 0px;
   font-family: sans-serif;
   background: #028197;
 }
 input[type="button"], input[type="submit"]{
-  border:0;
   background: none;
   text-align: center;
   border: 2px solid #3498db;
@@ -13,15 +12,35 @@ input[type="button"], input[type="submit"]{
   margin-right: 20px;
   padding: 5px 5px;
   width: 150px;
-  outline: none;
   color: white;
-  border-radius: 20px;
+  border-radius: 25px;
 }
 input[type="button"]:hover, input[type="submit"]:hover{
   border-color: #2ecc71;
   background: #2ecc71;
 }
-.basicbox{
+h1, h2, h3, h4{
+  color: white;
+  font-weight: 500;
+}
+#login{
+  position: absolute;  
+  top: 25px;
+  left: 5%;
+  transform: translate(-50%,-50%);
+  background: none;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid white;
+  background: white;
+  padding: 5px 0px;
+  width: 50px;
+  font-size: 0.8em;
+  font-weight: bolder;
+  color: black;
+  border-radius: 25px;
+}
+.centerbox{
   width: 300px;
   padding: 40px;
   position: absolute;
@@ -31,11 +50,7 @@ input[type="button"]:hover, input[type="submit"]:hover{
   background: #191919;
   text-align: center;
 }
-.basicbox h1{
-  color: white;
-  font-weight: 500;
-}
-.basicbox input[type = "text"],.basicbox input[type = "password"]{
+.centerbox input[type = "text"],.centerbox input[type = "password"]{
   border:0;
   background: none;
   display: block;
@@ -46,14 +61,14 @@ input[type="button"]:hover, input[type="submit"]:hover{
   width: 200px;
   outline: none;
   color: white;
-  border-radius: 24px;
+  border-radius: 25px;
   transition: 0.25s;
 }
-.basicbox input[type = "text"]:focus,.basicbox input[type = "password"]:focus{
-  width: 280px;
+.centerbox input[type = "text"]:focus,.centerbox input[type = "password"]:focus{
+  width: 250px;
   border-color: #2ecc71;
 }
-.basicbox input[type = "submit"]{
+.centerbox input[type = "submit"]{
   border:0;
   background: none;
   display: block;
@@ -63,16 +78,14 @@ input[type="button"]:hover, input[type="submit"]:hover{
   padding: 14px 40px;
   outline: none;
   color: white;
-  border-radius: 24px;
+  border-radius: 25px;
   transition: 0.25s;
   cursor: pointer;
 }
-.basicbox input[type = "submit"]:hover{
+.centerbox input[type = "submit"]:hover{
   background: #2ecc71;
 }
-.basicbox a{
-  border:0;
-  background: none;
+.centerbox a{
   display: block;
   margin: 20px auto;
   text-align: center;
@@ -80,26 +93,24 @@ input[type="button"]:hover, input[type="submit"]:hover{
   border: 2px solid #3498db;
   padding: 14px 10px;
   width: 200px;
-  outline: none;
   color: white;
-  border-radius: 24px;
+  border-radius: 25px;
   transition: 0.25s; 
+  cursor: pointer;
 }
-.basicbox a:hover{
-  width: 280px;
+.centerbox a:hover{
+  width: 250px;
+  color: #2ecc71;
   border-color: #2ecc71;
 }
 .textbox{
   width: 100%;
-  margin: 40px 0px;
   padding: 20px 0px;
   background: #191919;
   text-align: center;
 }
 .textbox h1, .textbox h2, .textbox h3{
   margin-top: 0;
-  color: white;
-  font-weight: 500;
 }
 .textbox p{
   color: gray;
@@ -107,26 +118,34 @@ input[type="button"]:hover, input[type="submit"]:hover{
 .testquestion{
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
-  grid-gap: 10px 5px;
+  grid-gap: 20px 5px;
   padding-top: 10px;
   padding-bottom: 30px;
   color:white;
 }
 .testquestion span{
   margin-left: 70%;
-  text-align: center;
   font-size: 1.5em;
 }
 .testquestion div[name="radiobox"]{
   margin-right: 70%;
 }
+.resultbox{
+  border:0;
+  display: block;
+  margin: 20px 15%;
+  text-align: center;
+  border: 2px solid gray;
+  padding: 14px 40px;
+  outline: none;
+  border-radius: 25px;
+}
 .typebox{
   width: 100%;
-  margin: 40px 0px;
   background: #191919;
   text-align: center;
   display: grid;
-  grid-template-columns: 1fr 1fr 5fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 10px 5px;
   padding-top: 10px;
   padding-bottom: 30px;
@@ -135,27 +154,50 @@ input[type="button"]:hover, input[type="submit"]:hover{
   color: white;
 }
 .typebox h1{
-  grid-column: span 3;
+  grid-column: span 4;
   margin-top: 0;
 }
 .typebox h2{
-  grid-row: span 2;
-  margin: 25px 0px;
+  display: block;
+  margin: 10px auto;
+  text-align: center;
+  border: 2px solid gray;
+  padding: 10px 10px;
+  width: 130px;
+  color: white;
+  border-radius: 20px;
+  transition: 0.25s; 
+  cursor: pointer;
 } 
-.typebox h4, .typebox p{
-  margin: 5px 0px;
+.typebox h2:hover{
+  width: 200px;
+  border-color: #191919;
+  color: gray;
+}
+.typebox div{
+  display: none;
+  grid-row: 6;
+  grid-column: 1/5;
+  grid-template-columns: 1fr 7fr;
+  grid-gap: 0;
+  justify-items: center;
+  align-items: center;
+  margin: 0px 10%;
+}
+.typebox div h4, .typebox div p{
+  margin: 0.5em 1em;
 }
 .typebox input[type="button"]{
   margin-top: 20px;
-  grid-column: span 3;
+  grid-column: span 4;
+  cursor: pointer;
 }
 .statsbox{
   width: 100%;
-  margin: 40px 0px;
   background: #191919;
   text-align: center;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 10px 5px;
   padding-top: 10px;
   padding-bottom: 30px;
@@ -164,22 +206,14 @@ input[type="button"]:hover, input[type="submit"]:hover{
   color: white; 
 }
 .statsbox h1{
-  grid-column: span 2;
+  grid-column: span 4;
   margin-top: 0; 
 }
-.statsbox h3{
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 70%;
-  text-align: right;
-}
-.statsbox p{
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-right: 70%;
-  text-align: left;
+.statsbox span{
+  color: gray;
 }
 .statsbox input[type="button"]{
   margin-top: 20px;
-  grid-column: span 2;
+  grid-column: span 4;
+  cursor: pointer;
 }

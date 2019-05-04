@@ -1,4 +1,3 @@
-<? ?>
 <?php
 require_once('./lib/mbtiDB.php');
 require_once('./lib/cookie.php');

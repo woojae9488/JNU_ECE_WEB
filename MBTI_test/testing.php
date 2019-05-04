@@ -90,6 +90,7 @@ $tQuest2 = $dbquest->getContentAll($curTArr[1]);
             <input type="submit" value="다음" onclick="return checkAllSelected()">
         </form>
     </div>
+    <a id="login" href="process_logout.php">Logout</a>
 </body>
 
 </html>
