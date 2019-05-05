@@ -37,30 +37,30 @@ $resTypeInfo = $dbtype->getTypeInfoById($result['tid']);
     <meta charset="UTF-8">
     <title>MBTI TEST</title>
     <link rel="stylesheet" href="./lib/style.css">
-    <script>
-        function checkSurely() {
-            var message = "작성한 검사 결과가 사라지고 다시 시작합니다.\n";
-            message += "정말 다시 검사하시겠습니까?";
-            if (confirm(message)) {
-                location.href = "process_retest.php";
-            }
-        }
-    </script>
+    <script src="./lib/function.js"></script>
 </head>
 
 <body>
     <div class="textbox">
         <h1><?= $idCookie ?>님의 MBTI 결과</h1>
-        <div class="resultbox">
+        <div id="individual-resultbox" class="resultbox">
             <h2>MBTI 타입: <?= $resTypeInfo['tname'] ?></h2>
             <h3>에너지 방향</h3>
-            <p>외향(E) <?= $result['eisum'] ?> 내향(I)</p>
+            <span>외향(E)</span>
+            <canvas id="canvas1" width=360 height=40></canvas>
+            <span>내향(I)</span>
             <h3>인식 기능</h3>
-            <p>감각(S) <?= $result['snsum'] ?> 직관(N)</p>
+            <span>감각(S)</span>
+            <canvas id="canvas2" width=360 height=40></canvas>
+            <span>직관(N)</span>
             <h3>판단 기능</h3>
-            <p>사고(T) <?= $result['tfsum'] ?> 감정(F)</p>
+            <span>사고(T)</span>
+            <canvas id="canvas3" width=360 height=40></canvas>
+            <span>감정(F)</span>
             <h3>생활 양식</h3>
-            <p>판단(J) <?= $result['jpsum'] ?> 인식(P)</p>
+            <span>판단(J)</span>
+            <canvas id="canvas4" width=360 height=40></canvas>
+            <span>인식(P)</span>
         </div>
         <div class="resultbox">
             <h2>유형에 따른 성격</h2>
@@ -75,6 +75,12 @@ $resTypeInfo = $dbtype->getTypeInfoById($result['tid']);
         <input type="button" value="홈으로 이동" onclick="location.href = 'index.php'">
     </div>
     <a id="login" href="process_logout.php">Logout</a>
+    <script>
+        drawScoreCircle("canvas1", <?= $result['eisum'] ?>);
+        drawScoreCircle("canvas2", <?= $result['snsum'] ?>);
+        drawScoreCircle("canvas3", <?= $result['tfsum'] ?>);
+        drawScoreCircle("canvas4", <?= $result['jpsum'] ?>);
+    </script>
 </body>
 
 </html>

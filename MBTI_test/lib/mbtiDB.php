@@ -3,8 +3,15 @@ class mbtiDB
 {
     private $conn;
 
-    function __construct($id = 'woojaek', $passwd = '12345678')
+    function __construct($id = '', $passwd = '')
     {
+        $dataPath = "./Data/dbconnect.txt";
+        if (file_exists($dataPath)) {
+            $dataFile = fopen($dataPath, 'r');
+            if ($dataFile) {
+                fscanf($dataFile, "%s%s", $id, $passwd);
+            }
+        }
         $this->conn = mysqli_connect(
             'localhost',
             $id,
@@ -12,6 +19,7 @@ class mbtiDB
             'mbti_test',
             '3307'
         );
+        if (!$this->conn) exit(-1);
     }
 
     function getMBTIDB()

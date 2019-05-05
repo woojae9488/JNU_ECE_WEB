@@ -49,19 +49,7 @@ $tQuest2 = $dbquest->getContentAll($curTArr[1]);
     <meta charset="UTF-8">
     <title>MBTI TEST</title>
     <link rel="stylesheet" href="./lib/style.css">
-    <script>
-        function checkAllSelected() {
-            var question1 = document.querySelectorAll('.qst1');
-            var question2 = document.querySelectorAll('.qst2');
-            for (var i = 0; i < question1.length; i++) {
-                if (!question1[i].checked && !question2[i].checked) {
-                    alert(`${i + 1}번째 문제를 아직 선택하지 않았습니다!!`);
-                    return false;
-                }
-            }
-            return true;
-        }
-    </script>
+    <script src="./lib/function.js"></script>
 </head>
 
 <body>

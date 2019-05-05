@@ -112,7 +112,7 @@ h1, h2, h3, h4{
 .textbox h1, .textbox h2, .textbox h3{
   margin-top: 0;
 }
-.textbox p{
+.textbox p, .textbox span{
   color: gray;
 }
 .testquestion{
@@ -126,6 +126,7 @@ h1, h2, h3, h4{
 .testquestion span{
   margin-left: 70%;
   font-size: 1.5em;
+  color: white;
 }
 .testquestion div[name="radiobox"]{
   margin-right: 70%;
@@ -139,6 +140,19 @@ h1, h2, h3, h4{
   padding: 14px 40px;
   outline: none;
   border-radius: 25px;
+}
+#individual-resultbox{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 0;
+  align-items: center;
+  justify-items: center;
+  color:white;
+  padding-bottom: 40px;
+}
+#individual-resultbox h2, #individual-resultbox h3{
+  margin: 20px;
+  grid-column: span 3;
 }
 .typebox{
   width: 100%;

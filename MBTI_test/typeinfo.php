@@ -21,6 +21,7 @@ $dbtype = new mbtiType($dbconn);
     <meta charset="UTF-8">
     <title>MBTI TEST</title>
     <link rel="stylesheet" href="./lib/style.css">
+    <script src="./lib/function.js"></script>
 </head>
 
 <body>
@@ -41,27 +42,7 @@ $dbtype = new mbtiType($dbconn);
         <input id="home" type="button" value="홈으로 이동" onclick="location.href = 'index.php'">
     </div>
     <a id="login" href=<?= $loginLink ?>><?= $loginBtn ?></a>
-
-    <script>
-        var typeDiv = document.querySelector('.typebox');
-        var types = typeDiv.getElementsByTagName('h2');
-        for (var i = 0; i < types.length; i++) {
-            types[i].addEventListener("mouseover", function(e) {
-                var typeName = e.srcElement.innerHTML;
-                var content = document.getElementById(typeName);
-                content.style.display = 'grid';
-                var homeButton=document.getElementById('home');
-                homeButton.style.display="none";
-            });
-            types[i].addEventListener("mouseout", function(e) {
-                var typeName = e.srcElement.innerHTML;
-                var content = document.getElementById(typeName);
-                content.style.display = 'none';
-                var homeButton=document.getElementById('home');
-                homeButton.style.display="block";
-            });
-        }
-    </script>
+    <script>addTypesEvent()</script>
 </body>
 
 </html>
